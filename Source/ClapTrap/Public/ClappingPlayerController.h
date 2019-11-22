@@ -16,11 +16,11 @@ class CLAPTRAP_API AClappingPlayerController : public APlayerController
 	
 public:
 
-    virtual void OnPossess(APawn* aPawn) override;
-    virtual void OnUnPossess() override;
+    //virtual void OnPossess(APawn* aPawn) override;
+    //virtual void OnUnPossess() override;
 
 protected:
-    virtual void SetupInputComponent() override;
+    //virtual void SetupInputComponent() override;
 
     void MoveRight(float value);
     void MoveUp(float value);

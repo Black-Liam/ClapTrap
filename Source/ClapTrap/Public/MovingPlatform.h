@@ -17,10 +17,6 @@ class CLAPTRAP_API AMovingPlatform : public AFloatingPlatform
 public:
     AMovingPlatform();
 
-protected:
-
-    virtual void BeginPlay() override;
-
     UPROPERTY(EditInstanceOnly, Category = "AI", meta = (EditCondition = "Others"))
         TArray<AActor*> PatrolPoints;
 
@@ -32,6 +28,12 @@ protected:
 
     UPROPERTY(EditInstanceOnly, Category = "AI", meta = (EditCondition = "Target"))
         AActor* Target;
+
+protected:
+
+    virtual void BeginPlay() override;
+
+    
 
     float speed = 400.0f;
     int nextLocation = 0;
