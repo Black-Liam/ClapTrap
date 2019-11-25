@@ -3,18 +3,19 @@
 
 #include "MovingPlatform.h"
 #include "..\Public\MovingPlatform.h"
+#include "..\Public\PatrolPoint.h"
 
 
 AMovingPlatform::AMovingPlatform()
 {
     PrimaryActorTick.bCanEverTick = true;
 
-    StartPoint = CreateDefaultSubobject<AActor>("Start");
-    StartPoint->SetActorLocation(RootComponent->GetComponentLocation() + FVector(0.0f, 100.0f, 0.0f));
+    StartPoint = CreateDefaultSubobject<APatrolPoint>("Start");
+    StartPoint->SetActorLocation(RootComponent->GetComponentLocation() + FVector(0.0f, 0.0f, 100.0f));
 
 
-    EndPoint = CreateDefaultSubobject<AActor>("End");
-    EndPoint->SetActorLocation(RootComponent->GetComponentLocation() + FVector(0.0f, -100.0f, 0.0f));
+    EndPoint = CreateDefaultSubobject<APatrolPoint>("End");
+    EndPoint->SetActorLocation(RootComponent->GetComponentLocation() + FVector(0.0f, 0.0f, -100.0f));
 
 }
 

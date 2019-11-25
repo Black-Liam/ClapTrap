@@ -17,17 +17,17 @@ class CLAPTRAP_API AMovingPlatform : public AFloatingPlatform
 public:
     AMovingPlatform();
 
-    UPROPERTY(EditInstanceOnly, Category = "AI", meta = (EditCondition = "Others"))
-        TArray<AActor*> PatrolPoints;
+    UPROPERTY(EditAnywhere, Category = "AI")
+        class APatrolPoint* StartPoint;
 
-    UPROPERTY(EditInstanceOnly, Category = "AI", meta = (EditCondition = "Target"))
-        AActor* StartPoint;
+    UPROPERTY(EditAnywhere, Category = "AI")
+        APatrolPoint* EndPoint;
 
-    UPROPERTY(EditInstanceOnly, Category = "AI", meta = (EditCondition = "Target"))
-        AActor* EndPoint;
+    UPROPERTY(EditAnywhere, Category = "AI")
+        TArray<APatrolPoint*> PatrolPoints;
 
-    UPROPERTY(EditInstanceOnly, Category = "AI", meta = (EditCondition = "Target"))
-        AActor* Target;
+    UPROPERTY(EditInstanceOnly, Category = "AI")
+        APatrolPoint* Target;
 
 protected:
 
