@@ -18,16 +18,16 @@ public:
     AMovingPlatform();
 
     UPROPERTY(EditAnywhere, Category = "AI")
-        class APatrolPoint* StartPoint;
+        class AActor* StartPoint;
 
     UPROPERTY(EditAnywhere, Category = "AI")
-        APatrolPoint* EndPoint;
+        AActor* EndPoint;
 
     UPROPERTY(EditAnywhere, Category = "AI")
-        TArray<APatrolPoint*> PatrolPoints;
+        TArray<AActor*> PatrolPoints;
 
     UPROPERTY(EditInstanceOnly, Category = "AI")
-        APatrolPoint* Target;
+        AActor* Target;
 
 protected:
 

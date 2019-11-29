@@ -31,12 +31,25 @@ public:
     UPROPERTY(EditAnywhere, Category = "Visual")
         class UPaperSpriteComponent* PawnSpriteComponent;
 
-    void MoveRight(float value);
-    void MoveUp(float value);
+    UPROPERTY(EditAnywhere, Category = "Collision")
+        class UCapsuleComponent* CollisionCap;
 
-private:
-    float MovementRight;
-    float MovementUp;
+    UPROPERTY(EditAnywhere, Category = "Camera")
+        class ULaggingCameraComponent* Camera;
+
+    void MoveRight(float value);
+    void MoveUp();
+    void Clap();
+
+    UPROPERTY(EditAnywhere, Category = "Movement")
+    bool bOnFloor = false;
+    UPROPERTY(EditAnywhere, Category = "Movement")
+    float MaxVelX = 50000.0f;
+
+    UPROPERTY(EditAnywhere, Category = "Movement")
+    float Xspeed = 5000.0f;
+    UPROPERTY(EditAnywhere, Category = "Movement")
+    float Yspeed = 5000.0f;
 
     //class AMyPlayerState* myPlayerState;
 };
