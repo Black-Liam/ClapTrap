@@ -3,8 +3,10 @@
 
 #include "ClappingPawn.h"
 #include "Components/CapsuleComponent.h"
+#include "MyBlueprintFunctionLibrary.h"
 #include "PaperSpriteComponent.h"
 #include "LaggingCameraComponent.h"
+
 
 // Sets default values
 AClappingPawn::AClappingPawn()
@@ -17,6 +19,7 @@ AClappingPawn::AClappingPawn()
     CollisionCap->SetCollisionProfileName("BlockAll");
     CollisionCap->SetNotifyRigidBodyCollision(true);
     CollisionCap->SetSimulatePhysics(true);
+    UMyBlueprintFunctionLibrary::LockPhysicsTo2DAxis(CollisionCap);
 
     PawnSpriteComponent = CreateDefaultSubobject<UPaperSpriteComponent>("Sprite Visual");
     PawnSpriteComponent->SetupAttachment(CollisionCap);
@@ -26,7 +29,7 @@ AClappingPawn::AClappingPawn()
 
     Camera = CreateDefaultSubobject<ULaggingCameraComponent>("Camera");
     Camera->SetProjectionMode(ECameraProjectionMode::Orthographic);
-    Camera->SetOrthoWidth(5000.0f);
+    Camera->SetOrthoWidth(3000.0f);
 }
 
 // Called when the game starts or when spawned
@@ -76,6 +79,17 @@ void AClappingPawn::MoveUp()
     {
         bOnFloor = false;
         CollisionCap->BodyInstance.AddForce(FVector(0.0f, 0.0f, 1.0f) * Yspeed * 100);
+    }
+}
+
+void AClappingPawn::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+    if (OtherActor)
+    {
+        if (OtherActor->ActorHasTag("Platform"))
+        {
+            bOnFloor = true;
+        }
     }
 }
 

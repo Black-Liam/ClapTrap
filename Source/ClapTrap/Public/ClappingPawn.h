@@ -37,9 +37,16 @@ public:
     UPROPERTY(EditAnywhere, Category = "Camera")
         class ULaggingCameraComponent* Camera;
 
-    void MoveRight(float value);
+    UFUNCTION()
+        void MoveRight(float value);
+
+        void Clap();
+
     void MoveUp();
-    void Clap();
+
+    UFUNCTION()
+        virtual	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+
 
     UPROPERTY(EditAnywhere, Category = "Movement")
     bool bOnFloor = false;
@@ -49,7 +56,7 @@ public:
     UPROPERTY(EditAnywhere, Category = "Movement")
     float Xspeed = 5000.0f;
     UPROPERTY(EditAnywhere, Category = "Movement")
-    float Yspeed = 5000.0f;
+    float Yspeed = 10000.0f;
 
     //class AMyPlayerState* myPlayerState;
 };

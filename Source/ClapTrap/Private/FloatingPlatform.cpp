@@ -13,13 +13,15 @@ AFloatingPlatform::AFloatingPlatform()
 	PrimaryActorTick.bCanEverTick = true;
 
     PlatformCollision = CreateDefaultSubobject<UBoxComponent>("Collision");
-    PlatformSpriteComponent = CreateDefaultSubobject<UPaperSpriteComponent>("Visual");
-
     SetRootComponent(PlatformCollision);
+
+    PlatformSpriteComponent = CreateDefaultSubobject<UPaperSpriteComponent>("Visual");
     PlatformSpriteComponent->SetupAttachment(RootComponent);
 
+    PlatformCollision->SetCollisionProfileName("BlockAll");
+    PlatformCollision->SetNotifyRigidBodyCollision(true);
 
-
+    Tags.Add("Platform");
 }
 
 // Called when the game starts or when spawned
