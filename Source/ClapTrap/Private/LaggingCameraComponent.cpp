@@ -3,3 +3,8 @@
 
 #include "LaggingCameraComponent.h"
 
+void ULaggingCameraComponent::CatchUp(FVector focus)
+{
+    focus *= FVector(0, 0, 1);
+    this->SetWorldLocation(focus + FVector(0.f, 0.f, 150.f));
+}

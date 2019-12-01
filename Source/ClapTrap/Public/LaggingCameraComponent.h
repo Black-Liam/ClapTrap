@@ -14,4 +14,9 @@ class CLAPTRAP_API ULaggingCameraComponent : public UCameraComponent
 {
 	GENERATED_BODY()
 	
+
+public:
+
+    UFUNCTION()
+        void CatchUp(FVector focus);
 };

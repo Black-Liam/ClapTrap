@@ -32,21 +32,25 @@ void AMovingPlatform::BeginPlay()
 void AMovingPlatform::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
-
-    FVector thisLocation = GetActorLocation();
-    FVector thatLocation = Target->GetActorLocation();
-
-    FVector targetLocation = FMath::VInterpConstantTo(thisLocation, thatLocation, DeltaTime, speed);
-
-    SetActorLocation(targetLocation);
-
-    if (thisLocation.Distance(thisLocation, thatLocation) < 10.0f)
+    if (bWillStop && bHasStopped){}
+    else
     {
-        if (Target == PatrolPoints.Last())
-            nextLocation = 0;
-        else
-            nextLocation++;
+        FVector thisLocation = GetActorLocation();
+        FVector thatLocation = Target->GetActorLocation();
 
-        Target = PatrolPoints[nextLocation];
+        FVector targetLocation = FMath::VInterpConstantTo(thisLocation, thatLocation, DeltaTime, speed);
+
+        SetActorLocation(targetLocation);
+
+        if (thisLocation.Distance(thisLocation, thatLocation) < 10.0f)
+        {
+            if (Target == PatrolPoints.Last())
+                nextLocation = 0;
+            else
+                nextLocation++;
+
+            Target = PatrolPoints[nextLocation];
+        }
     }
+    
 }

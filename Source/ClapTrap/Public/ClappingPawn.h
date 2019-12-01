@@ -37,6 +37,9 @@ public:
     UPROPERTY(EditAnywhere, Category = "Camera")
         class ULaggingCameraComponent* Camera;
 
+    UPROPERTY(EditAnywhere, Category = "Collision")
+        class UBoxComponent* LandingOverlap;
+
     UFUNCTION()
         void MoveRight(float value);
 
@@ -45,8 +48,10 @@ public:
     void MoveUp();
 
     UFUNCTION()
-        virtual	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+        virtual	void OnComponentHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
+    UFUNCTION()
+        void Landed(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
     UPROPERTY(EditAnywhere, Category = "Movement")
     bool bOnFloor = false;

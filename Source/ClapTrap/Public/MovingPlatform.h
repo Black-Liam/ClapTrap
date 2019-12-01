@@ -29,11 +29,15 @@ public:
     UPROPERTY(EditInstanceOnly, Category = "AI")
         AActor* Target;
 
+    UPROPERTY(EditAnywhere, Category = "AI")
+        bool bHasStopped = false;
+
 protected:
 
     virtual void BeginPlay() override;
 
-    
+    UPROPERTY(EditAnywhere, Category = "AI")
+        bool bWillStop = false;
 
     float speed = 400.0f;
     int nextLocation = 0;

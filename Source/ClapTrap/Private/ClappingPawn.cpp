@@ -3,9 +3,11 @@
 
 #include "ClappingPawn.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/BoxComponent.h"
 #include "MyBlueprintFunctionLibrary.h"
 #include "PaperSpriteComponent.h"
 #include "LaggingCameraComponent.h"
+#include "MovingPlatform.h"
 
 
 // Sets default values
@@ -30,6 +32,12 @@ AClappingPawn::AClappingPawn()
     Camera = CreateDefaultSubobject<ULaggingCameraComponent>("Camera");
     Camera->SetProjectionMode(ECameraProjectionMode::Orthographic);
     Camera->SetOrthoWidth(3000.0f);
+
+    LandingOverlap = CreateDefaultSubobject<UBoxComponent>("Landing Gear");
+    LandingOverlap->SetupAttachment(CollisionCap);
+    LandingOverlap->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+    LandingOverlap->SetGenerateOverlapEvents(true);
+    LandingOverlap->OnComponentBeginOverlap.AddDynamic(this, &AClappingPawn::Landed);
 }
 
 // Called when the game starts or when spawned
@@ -82,14 +90,34 @@ void AClappingPawn::MoveUp()
     }
 }
 
-void AClappingPawn::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+void AClappingPawn::OnComponentHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+    if (OtherActor)
+    {
+
+    }
+}
+
+void AClappingPawn::Landed(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
     if (OtherActor)
     {
         if (OtherActor->ActorHasTag("Platform"))
         {
             bOnFloor = true;
+            AMovingPlatform* landing = Cast<AMovingPlatform>(OtherActor);
+            if (landing)
+            {
+                landing->bHasStopped = true;
+            }
+                
+            Camera->SetWorldLocation(this->GetActorLocation());
+
         }
+
+
+
+
     }
 }
 
