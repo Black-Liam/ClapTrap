@@ -112,7 +112,7 @@ void AClappingPawn::Landed(UPrimitiveComponent* OverlappedComponent, AActor* Oth
             }
                 
             Camera->SetWorldLocation(this->GetActorLocation());
-
+            CollisionCap->SetPhysicsLinearVelocity(FVector(0,0,0));
         }
 
 
