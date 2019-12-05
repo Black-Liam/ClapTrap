@@ -23,9 +23,109 @@ void ASpawningManager::BeginPlay()
 {
 	Super::BeginPlay();
 
-    for (int i = 0; i < 10; i++)
+    int num = 10;
+
+    for (int i = 0; i < num; i++)
     {
-        SpawnPlatform();
+        if (FPlatformTemplate && MPlatformTemplate && SPlatformTemplate)
+        {
+            //DECLARE a variable called World of type const UWorld* and assign it to the return value of GetWorld()
+            UWorld* World = GetWorld();
+            //IF World is NOT EQUAL to nullptr
+            if (World)
+            {
+                float XOffset = (FMath::FRand() * 1000.f) - 500.f;
+
+                FActorSpawnParameters SpawnParams;
+
+                SpawnParams.Owner = this;
+
+                SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+                FTransform SpawnTransform = GetTransform();
+                SpawnTransform.SetLocation(SpawnTransform.GetLocation() + FVector(XOffset, 0, 400 * platformNumber));
+
+                bool success = false;
+                if (platformNumber == 0)
+                {
+                    AFloatingPlatform* SpawnedActor = World->SpawnActor<AFloatingPlatform>(FPlatformTemplate, SpawnTransform, SpawnParams);
+                    if (SpawnedActor)
+                    {
+                        success = true;
+                        Platforms.Add(SpawnedActor);
+                    }
+                }
+                else if (platformNumber % 3 == 0)
+                {
+                    AMovingPlatform* SpawnedActor = World->SpawnActor<AMovingPlatform>(MPlatformTemplate, SpawnTransform, SpawnParams);
+                    if (SpawnedActor)
+                    {
+                        success = true;
+                        Platforms.Add(SpawnedActor);
+                    }
+                }
+                else if (platformNumber % 2 == 0)
+                {
+                    AStoppingPlatform* SpawnedActor = World->SpawnActor<AStoppingPlatform>(SPlatformTemplate, SpawnTransform, SpawnParams);
+                    if (SpawnedActor)
+                    {
+                        success = true;
+                        Platforms.Add(SpawnedActor);
+                    }
+                }
+                else
+                {
+                    AFloatingPlatform* SpawnedActor = World->SpawnActor<AFloatingPlatform>(FPlatformTemplate, SpawnTransform, SpawnParams);
+                    if (SpawnedActor)
+                    {
+                        success = true;
+                        Platforms.Add(SpawnedActor);
+                    }
+                }
+                if (success == true)
+                {
+                    platformNumber++;
+                    success = false;
+                }
+            }
+        }
+    }
+
+    for (int i = 0; i < 2 * num; i++)
+    {
+        if (PatrolTemplate)
+        {
+            UWorld* World = GetWorld();
+            if (World)
+            {
+                FActorSpawnParameters SpawnParams;
+                SpawnParams.Owner = this;
+                SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+                float XOffset = (FMath::FRand() * 1000.f) - 500.f;
+                FTransform PatrolTransform = Platforms[i/2]->GetTransform();
+                if (i % 2 == 0)
+                {
+                    PatrolTransform.SetLocation(PatrolTransform.GetLocation() + FVector(100, 0, 0) + FVector(XOffset, 0, 300 * platformNumber));
+                }
+                else
+                {
+                    PatrolTransform.SetLocation(PatrolTransform.GetLocation() - FVector(100, 0, 0) + FVector(XOffset, 0, 300 * platformNumber));
+                }
+                APatrolPoint* patrolPoint = World->SpawnActor<APatrolPoint>(PatrolTemplate, PatrolTransform, SpawnParams);
+
+                if (patrolPoint)
+                {
+                    PatrolPoints.Add(patrolPoint);
+                }
+            }
+        }
+    }
+
+    for (int i = 0; i < num; i++)
+    {
+        AMovingPlatform* mover = Cast<AMovingPlatform>(Platforms[i]);
+        if (mover)
+            mover->SetPatrol(PatrolPoints[i * 2], PatrolPoints[i * 2 + 1]);
     }
 	
 }
@@ -39,7 +139,7 @@ void ASpawningManager::Tick(float DeltaTime)
 
 void ASpawningManager::SpawnPlatform()
 {
-    if (FPlatformTemplate && MPlatformTemplate && SPlatformTemplate /*&& PatrolTemplate*/)
+    if (FPlatformTemplate && MPlatformTemplate && SPlatformTemplate)
     {
         //DECLARE a variable called World of type const UWorld* and assign it to the return value of GetWorld()
         UWorld* World = GetWorld();
@@ -48,28 +148,16 @@ void ASpawningManager::SpawnPlatform()
         {
             float XOffset = (FMath::FRand() * 1000.f) - 500.f;
 
-            //DECLARE a variable called SpawnParams of type FActorSpawnParameters
             FActorSpawnParameters SpawnParams;
-            //SET SpawnParams Owner to this
+
             SpawnParams.Owner = this;
-            //SET SpawnParams SpawnCollisionHandlingOverride property to ESpawnActorCollisionHandlingMethod::AlwaysSpawn
+
             SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
-            //DECLARE a variable called SpawnTransform of type FTransform and assign it to the return value of SpawnPointComponent->GetComponentTransform()
             FTransform SpawnTransform = GetTransform();
             SpawnTransform.SetLocation(SpawnTransform.GetLocation() + FVector(XOffset,0,400*platformNumber));
 
-            FTransform PatrolTransform1 = GetTransform();
-            PatrolTransform1.SetLocation(PatrolTransform1.GetLocation() + FVector(100, 0, 0) + FVector(XOffset, 0, 300 * platformNumber));
-
-            FTransform PatrolTransform2 = GetTransform();
-            PatrolTransform2.SetLocation(PatrolTransform2.GetLocation() - FVector(100, 0, 0) + FVector(XOffset, 0, 300 * platformNumber));
-
             bool success = false;
-
-            //DECLARE a variable called SpawnedActor of type AFallingActor* and assign it to the return value of World->SpawnActor<type>(args..), 
-            //passing in AFallingActor as the type argument (inside <>) and in function arguments pass --> FallingActorTemplate, SpawnTransform, SpawnParams
-            //SpawnActor() is a very important Function, it Instantiates the TSubclassOf template class that we set in the editor. 
             if (platformNumber == 0)
             {
                 AFloatingPlatform* SpawnedActor = World->SpawnActor<AFloatingPlatform>(FPlatformTemplate, SpawnTransform, SpawnParams);
@@ -81,11 +169,7 @@ void ASpawningManager::SpawnPlatform()
             else if (platformNumber % 3 == 0)
             {
                 AMovingPlatform* SpawnedActor = World->SpawnActor<AMovingPlatform>(MPlatformTemplate, SpawnTransform, SpawnParams);
-                int bp = 1;
-                APatrolPoint* patrolPoint1 = World->SpawnActor<APatrolPoint>(PatrolTemplate, PatrolTransform1, SpawnParams);
-                APatrolPoint* patrolPoint2 = World->SpawnActor<APatrolPoint>(PatrolTemplate, PatrolTransform2, SpawnParams);
-                SpawnedActor->SetPatrol(patrolPoint1, patrolPoint2);
-                if (SpawnedActor && patrolPoint1 && patrolPoint2)
+                if (SpawnedActor)
                 {
                     success = true;
                 }
@@ -93,11 +177,7 @@ void ASpawningManager::SpawnPlatform()
             else if (platformNumber % 2 == 0)
             {
                 AStoppingPlatform* SpawnedActor = World->SpawnActor<AStoppingPlatform>(SPlatformTemplate, SpawnTransform, SpawnParams);
-                int bp = 1;
-                APatrolPoint* patrolPoint1 = World->SpawnActor<APatrolPoint>(PatrolTemplate, PatrolTransform1, SpawnParams);
-                APatrolPoint* patrolPoint2 = World->SpawnActor<APatrolPoint>(PatrolTemplate, PatrolTransform2, SpawnParams);
-                SpawnedActor->SetPatrol(patrolPoint1, patrolPoint2);
-                if (SpawnedActor && patrolPoint1 && patrolPoint2)
+                if (SpawnedActor)
                 {
                     success = true;
                 }
@@ -117,5 +197,10 @@ void ASpawningManager::SpawnPlatform()
             }
         }
     }
+}
+
+void ASpawningManager::SpawnPatrol()
+{
+
 }
 

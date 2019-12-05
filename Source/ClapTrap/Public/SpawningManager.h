@@ -27,6 +27,13 @@ public:
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
         TSubclassOf<class APatrolPoint> PatrolTemplate;
 
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Arrays")
+        TArray<APatrolPoint*> PatrolPoints;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Arrays")
+        TArray<AFloatingPlatform*> Platforms;
+
     UPROPERTY(BlueprintReadOnly)
         int platformNumber = 0;
 
@@ -39,4 +46,5 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
     void SpawnPlatform();
+    void SpawnPatrol();
 };
