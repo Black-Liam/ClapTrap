@@ -15,6 +15,9 @@ public:
 	// Sets default values for this actor's properties
 	APatrolPoint();
 
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
+        class UPaperSpriteComponent* SpriteComponent;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

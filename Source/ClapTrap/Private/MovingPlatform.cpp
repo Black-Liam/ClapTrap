@@ -10,12 +10,6 @@ AMovingPlatform::AMovingPlatform()
 {
     PrimaryActorTick.bCanEverTick = true;
 
-    StartPoint = CreateDefaultSubobject<APatrolPoint>("Start");
-    StartPoint->SetActorLocation(RootComponent->GetComponentLocation() + FVector(0.0f, 0.0f, 100.0f));
-    
-    
-    EndPoint = CreateDefaultSubobject<APatrolPoint>("End");
-    EndPoint->SetActorLocation(RootComponent->GetComponentLocation() + FVector(0.0f, 0.0f, -100.0f));
 
 }
 
@@ -33,6 +27,11 @@ void AMovingPlatform::SetPatrol(APatrolPoint* s, APatrolPoint* e)
 {
     StartPoint = s;
     EndPoint = e;
+
+    PatrolPoints.Add(StartPoint);
+    PatrolPoints.Add(EndPoint);
+
+    Target = PatrolPoints[nextLocation];
 }
 
 void AMovingPlatform::Tick(float DeltaTime)

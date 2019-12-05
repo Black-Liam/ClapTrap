@@ -25,7 +25,7 @@ public:
         TSubclassOf<class AStoppingPlatform> SPlatformTemplate;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
-        TSubclassOf<class AActor> PatrolTemplate;
+        TSubclassOf<class APatrolPoint> PatrolTemplate;
 
     UPROPERTY(BlueprintReadOnly)
         int platformNumber = 0;
