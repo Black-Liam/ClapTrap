@@ -18,16 +18,16 @@ public:
     AMovingPlatform();
 
     UPROPERTY(EditAnywhere, Category = "AI")
-        class AActor* StartPoint;
+        class APatrolPoint* StartPoint;
 
     UPROPERTY(EditAnywhere, Category = "AI")
-        AActor* EndPoint;
+        APatrolPoint* EndPoint;
 
     UPROPERTY(EditAnywhere, Category = "AI")
-        TArray<AActor*> PatrolPoints;
+        TArray<APatrolPoint*> PatrolPoints;
 
     UPROPERTY(EditInstanceOnly, Category = "AI")
-        AActor* Target;
+        APatrolPoint* Target;
 
     UPROPERTY(EditAnywhere, Category = "AI")
         bool bHasStopped = false;
@@ -43,6 +43,9 @@ protected:
     int nextLocation = 0;
 
 public:
+
+    UFUNCTION()
+        void SetPatrol(APatrolPoint* s, APatrolPoint* e);
 
     virtual void Tick(float DeltaTime) override;
 };
