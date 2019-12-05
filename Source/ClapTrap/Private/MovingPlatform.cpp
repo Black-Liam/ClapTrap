@@ -10,12 +10,15 @@ AMovingPlatform::AMovingPlatform()
 {
     PrimaryActorTick.bCanEverTick = true;
 
-
+    StartPoint = CreateDefaultSubobject<APatrolPoint>("Start");
+    EndPoint = CreateDefaultSubobject<APatrolPoint>("End");
 }
 
 void AMovingPlatform::BeginPlay()
 {
     Super::BeginPlay();
+
+
 
     PatrolPoints.Add(StartPoint);
     PatrolPoints.Add(EndPoint);
