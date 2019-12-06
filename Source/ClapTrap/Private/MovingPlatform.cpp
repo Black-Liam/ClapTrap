@@ -20,10 +20,10 @@ void AMovingPlatform::BeginPlay()
 
 
 
-    PatrolPoints.Add(StartPoint);
-    PatrolPoints.Add(EndPoint);
-
-    Target = PatrolPoints[nextLocation];
+    //PatrolPoints.Add(StartPoint);
+    //PatrolPoints.Add(EndPoint);
+    //
+    //Target = PatrolPoints[nextLocation];
 }
 
 void AMovingPlatform::SetPatrol(APatrolPoint* s, APatrolPoint* e)

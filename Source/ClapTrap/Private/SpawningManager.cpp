@@ -105,11 +105,11 @@ void ASpawningManager::BeginPlay()
                 FTransform PatrolTransform = Platforms[i/2]->GetTransform();
                 if (i % 2 == 0)
                 {
-                    PatrolTransform.SetLocation(PatrolTransform.GetLocation() + FVector(100, 0, 0) + FVector(XOffset, 0, 300 * platformNumber));
+                    PatrolTransform.SetLocation(PatrolTransform.GetLocation() + FVector(200, 0, 0));
                 }
                 else
                 {
-                    PatrolTransform.SetLocation(PatrolTransform.GetLocation() - FVector(100, 0, 0) + FVector(XOffset, 0, 300 * platformNumber));
+                    PatrolTransform.SetLocation(PatrolTransform.GetLocation() - FVector(200, 0, 0) );
                 }
                 APatrolPoint* patrolPoint = World->SpawnActor<APatrolPoint>(PatrolTemplate, PatrolTransform, SpawnParams);
 
@@ -155,7 +155,7 @@ void ASpawningManager::SpawnPlatform()
             SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
             FTransform SpawnTransform = GetTransform();
-            SpawnTransform.SetLocation(SpawnTransform.GetLocation() + FVector(XOffset,0,400*platformNumber));
+            SpawnTransform.SetLocation(SpawnTransform.GetLocation() + FVector(XOffset, 0, 400 * platformNumber));
 
             bool success = false;
             if (platformNumber == 0)
@@ -164,6 +164,7 @@ void ASpawningManager::SpawnPlatform()
                 if (SpawnedActor)
                 {
                     success = true;
+                    Platforms.Add(SpawnedActor);
                 }
             }
             else if (platformNumber % 3 == 0)
@@ -172,6 +173,7 @@ void ASpawningManager::SpawnPlatform()
                 if (SpawnedActor)
                 {
                     success = true;
+                    Platforms.Add(SpawnedActor);
                 }
             }
             else if (platformNumber % 2 == 0)
@@ -180,6 +182,7 @@ void ASpawningManager::SpawnPlatform()
                 if (SpawnedActor)
                 {
                     success = true;
+                    Platforms.Add(SpawnedActor);
                 }
             }
             else
@@ -188,6 +191,7 @@ void ASpawningManager::SpawnPlatform()
                 if (SpawnedActor)
                 {
                     success = true;
+                    Platforms.Add(SpawnedActor);
                 }
             }
             if (success == true)
@@ -197,10 +201,40 @@ void ASpawningManager::SpawnPlatform()
             }
         }
     }
-}
 
-void ASpawningManager::SpawnPatrol()
+for (int i = 0; i < 2; i++)
 {
+    if (PatrolTemplate)
+    {
+        UWorld* World = GetWorld();
+        if (World)
+        {
+            FActorSpawnParameters SpawnParams;
+            SpawnParams.Owner = this;
+            SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+            float XOffset = (FMath::FRand() * 1000.f) - 500.f;
+            FTransform PatrolTransform = Platforms[i / 2]->GetTransform();
+            if (i % 2 == 0)
+            {
+                PatrolTransform.SetLocation(PatrolTransform.GetLocation() + FVector(200, 0, 0));
+            }
+            else
+            {
+                PatrolTransform.SetLocation(PatrolTransform.GetLocation() - FVector(200, 0, 0));
+            }
+            APatrolPoint* patrolPoint = World->SpawnActor<APatrolPoint>(PatrolTemplate, PatrolTransform, SpawnParams);
 
+            if (patrolPoint)
+            {
+                PatrolPoints.Add(patrolPoint);
+            }
+        }
+    }
 }
 
+//int iter = Platforms.Last.Index;
+//
+//AMovingPlatform* mover = Cast<AMovingPlatform>(Platforms[iter]);
+//if (mover)
+//    mover->SetPatrol(PatrolPoints[iter * 2], PatrolPoints[iter * 2 - 1]);
+}

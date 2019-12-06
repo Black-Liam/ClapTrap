@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "SleepingEnemy.generated.h"
 
+class APawn;
+
 UCLASS()
 class CLAPTRAP_API ASleepingEnemy : public AActor
 {
