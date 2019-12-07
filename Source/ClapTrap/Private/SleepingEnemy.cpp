@@ -2,12 +2,28 @@
 
 
 #include "SleepingEnemy.h"
+#include "Components/BoxComponent.h"
+#include "MyBlueprintFunctionLibrary.h"
+#include "PaperFlipbookComponent.h"
 
 // Sets default values
 ASleepingEnemy::ASleepingEnemy()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+    EnemyCollision = CreateDefaultSubobject<UBoxComponent>("Capsule Collision");
+    SetRootComponent(EnemyCollision);
+    EnemyCollision->SetCollisionProfileName("BlockAll");
+    EnemyCollision->SetNotifyRigidBodyCollision(true);
+    EnemyCollision->SetSimulatePhysics(true);
+    UMyBlueprintFunctionLibrary::LockPhysicsTo2DAxis(EnemyCollision);
+
+    EnemySpriteComponent = CreateDefaultSubobject<UPaperFlipbookComponent>("Sprite Visual");
+    EnemySpriteComponent->SetupAttachment(EnemyCollision);
+    EnemySpriteComponent->SetCollisionProfileName("NoCollision");
+    EnemySpriteComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+    EnemySpriteComponent->SetGenerateOverlapEvents(false);
 
 }
 
@@ -27,30 +43,11 @@ void ASleepingEnemy::Tick(float DeltaTime)
 
 void ASleepingEnemy::OnNoiseHeard(APawn* NoiseInstigator, const FVector& Location, float Volume)
 {
-    //TODO Week 10b:
-    //CALL DrawDebugSphere() passing in (GetWorld(), Location, 32.0f, 12, FColor::Green, false, 10.0f)
-    //DrawDebugSphere(GetWorld(), Location, 32.0f, 12, FColor::Green, false, 10.0f);
+    if (Volume >= 1.0)
+    {
 
-    //TODO Week 10b:
-    //DECLARE a variable called Direction of type FVEctor and Assign it to the result of Location -  GetActorLocation()
-    FVector Direction = Location - GetActorLocation();
-    //TODO Week 10b:
-    //CALL Normalize() on Direction
-    Direction.Normalize();
+    }
 
-    //TODO Week 10b:
-    //DECLARE a variable called NewLookAt of type FRotator and SET it to the return value of FRotationMatrix::MakeFromX(Direction).Rotator()
-    FRotator NewLookAt = FRotationMatrix::MakeFromX(Direction).Rotator();
-    //TODO Week 10b:
-    //SET NewLookAt.Pitch to 0.0f
-    NewLookAt.Pitch = 0.0f;
-    //TODO Week 10b:
-    //SET NewLookAt.Roll to 0.0f
-    NewLookAt.Roll = 0.0f;
-
-    //TODO Week 10b:
-    //CALL SetActorRotation() passing in NewLookAt
-    SetActorRotation(NewLookAt);
 
 }
 

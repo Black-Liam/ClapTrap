@@ -21,7 +21,7 @@ public:
         class UBoxComponent* EnemyCollision;
 
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
-        class UPaperSpriteComponent* EnemySpriteComponent;
+        class UPaperFlipbookComponent* EnemySpriteComponent;
 
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Sensing", meta = (AllowPrivateAccess = "true"))
         class UPawnSensingComponent* ListeningComponent;

@@ -37,6 +37,25 @@ public:
     UPROPERTY(BlueprintReadOnly)
         int platformNumber = 0;
 
+    UPROPERTY(EditAnywhere, Category = "Difficulty")
+        int numberOfPlatforms = 40;
+
+    UPROPERTY(EditAnywhere, Category = "Difficulty")
+        int movingPlatformFrequency = 3;
+
+    UPROPERTY(EditAnywhere, Category = "Difficulty")
+        int stoppingPlatformFrequency = 5;
+
+    UPROPERTY(EditAnywhere, Category = "Difficulty")
+        int sleepingEnemyFrequency = 4;
+
+    UPROPERTY(EditAnywhere, Category = "Difficulty")
+        int checkpointFrequency = 10;
+
+    UPROPERTY(EditAnywhere, Category = "Difficulty")
+        int flyingEnemyFrequency = 6;
+
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

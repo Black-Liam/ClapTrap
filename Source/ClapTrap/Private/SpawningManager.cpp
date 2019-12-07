@@ -23,9 +23,9 @@ void ASpawningManager::BeginPlay()
 {
 	Super::BeginPlay();
 
-    int num = 10;
-
-    for (int i = 0; i < num; i++)
+    int num = 40;
+#pragma region Platforms
+    for (int i = 0; i < numberOfPlatforms; i++)
     {
         if (FPlatformTemplate && MPlatformTemplate && SPlatformTemplate)
         {
@@ -48,14 +48,15 @@ void ASpawningManager::BeginPlay()
                 bool success = false;
                 if (platformNumber == 0)
                 {
-                    AFloatingPlatform* SpawnedActor = World->SpawnActor<AFloatingPlatform>(FPlatformTemplate, SpawnTransform, SpawnParams);
+                    FTransform firstTransform = GetTransform();
+                    AFloatingPlatform* SpawnedActor = World->SpawnActor<AFloatingPlatform>(FPlatformTemplate, firstTransform, SpawnParams);
                     if (SpawnedActor)
                     {
                         success = true;
                         Platforms.Add(SpawnedActor);
                     }
                 }
-                else if (platformNumber % 3 == 0)
+                else if (platformNumber % movingPlatformFrequency == 0)
                 {
                     AMovingPlatform* SpawnedActor = World->SpawnActor<AMovingPlatform>(MPlatformTemplate, SpawnTransform, SpawnParams);
                     if (SpawnedActor)
@@ -64,7 +65,7 @@ void ASpawningManager::BeginPlay()
                         Platforms.Add(SpawnedActor);
                     }
                 }
-                else if (platformNumber % 2 == 0)
+                else if (platformNumber % stoppingPlatformFrequency == 0)
                 {
                     AStoppingPlatform* SpawnedActor = World->SpawnActor<AStoppingPlatform>(SPlatformTemplate, SpawnTransform, SpawnParams);
                     if (SpawnedActor)
@@ -91,7 +92,7 @@ void ASpawningManager::BeginPlay()
         }
     }
 
-    for (int i = 0; i < 2 * num; i++)
+    for (int i = 0; i < 2 * numberOfPlatforms; i++)
     {
         if (PatrolTemplate)
         {
@@ -121,13 +122,15 @@ void ASpawningManager::BeginPlay()
         }
     }
 
-    for (int i = 0; i < num; i++)
+    for (int i = 0; i < numberOfPlatforms; i++)
     {
         AMovingPlatform* mover = Cast<AMovingPlatform>(Platforms[i]);
         if (mover)
             mover->SetPatrol(PatrolPoints[i * 2], PatrolPoints[i * 2 + 1]);
     }
-	
+#pragma endregion Platforms
+
+
 }
 
 // Called every frame
@@ -135,106 +138,4 @@ void ASpawningManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-}
-
-void ASpawningManager::SpawnPlatform()
-{
-    if (FPlatformTemplate && MPlatformTemplate && SPlatformTemplate)
-    {
-        //DECLARE a variable called World of type const UWorld* and assign it to the return value of GetWorld()
-        UWorld* World = GetWorld();
-        //IF World is NOT EQUAL to nullptr
-        if (World)
-        {
-            float XOffset = (FMath::FRand() * 1000.f) - 500.f;
-
-            FActorSpawnParameters SpawnParams;
-
-            SpawnParams.Owner = this;
-
-            SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-
-            FTransform SpawnTransform = GetTransform();
-            SpawnTransform.SetLocation(SpawnTransform.GetLocation() + FVector(XOffset, 0, 400 * platformNumber));
-
-            bool success = false;
-            if (platformNumber == 0)
-            {
-                AFloatingPlatform* SpawnedActor = World->SpawnActor<AFloatingPlatform>(FPlatformTemplate, SpawnTransform, SpawnParams);
-                if (SpawnedActor)
-                {
-                    success = true;
-                    Platforms.Add(SpawnedActor);
-                }
-            }
-            else if (platformNumber % 3 == 0)
-            {
-                AMovingPlatform* SpawnedActor = World->SpawnActor<AMovingPlatform>(MPlatformTemplate, SpawnTransform, SpawnParams);
-                if (SpawnedActor)
-                {
-                    success = true;
-                    Platforms.Add(SpawnedActor);
-                }
-            }
-            else if (platformNumber % 2 == 0)
-            {
-                AStoppingPlatform* SpawnedActor = World->SpawnActor<AStoppingPlatform>(SPlatformTemplate, SpawnTransform, SpawnParams);
-                if (SpawnedActor)
-                {
-                    success = true;
-                    Platforms.Add(SpawnedActor);
-                }
-            }
-            else
-            {
-                AFloatingPlatform* SpawnedActor = World->SpawnActor<AFloatingPlatform>(FPlatformTemplate, SpawnTransform, SpawnParams);
-                if (SpawnedActor)
-                {
-                    success = true;
-                    Platforms.Add(SpawnedActor);
-                }
-            }
-            if (success == true)
-            {
-                platformNumber++;
-                success = false;
-            }
-        }
-    }
-
-for (int i = 0; i < 2; i++)
-{
-    if (PatrolTemplate)
-    {
-        UWorld* World = GetWorld();
-        if (World)
-        {
-            FActorSpawnParameters SpawnParams;
-            SpawnParams.Owner = this;
-            SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-            float XOffset = (FMath::FRand() * 1000.f) - 500.f;
-            FTransform PatrolTransform = Platforms[i / 2]->GetTransform();
-            if (i % 2 == 0)
-            {
-                PatrolTransform.SetLocation(PatrolTransform.GetLocation() + FVector(200, 0, 0));
-            }
-            else
-            {
-                PatrolTransform.SetLocation(PatrolTransform.GetLocation() - FVector(200, 0, 0));
-            }
-            APatrolPoint* patrolPoint = World->SpawnActor<APatrolPoint>(PatrolTemplate, PatrolTransform, SpawnParams);
-
-            if (patrolPoint)
-            {
-                PatrolPoints.Add(patrolPoint);
-            }
-        }
-    }
-}
-
-//int iter = Platforms.Last.Index;
-//
-//AMovingPlatform* mover = Cast<AMovingPlatform>(Platforms[iter]);
-//if (mover)
-//    mover->SetPatrol(PatrolPoints[iter * 2], PatrolPoints[iter * 2 - 1]);
 }

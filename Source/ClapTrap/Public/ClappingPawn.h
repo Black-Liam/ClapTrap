@@ -31,6 +31,9 @@ public:
     UPROPERTY(EditAnywhere, Category = "Visual")
         class UPaperSpriteComponent* PawnSpriteComponent;
 
+    UPROPERTY(EditAnywhere, Category = "Visual")
+        class UPaperSpriteComponent* ClapSprite;
+
     UPROPERTY(EditAnywhere, Category = "Collision")
         class UCapsuleComponent* CollisionCap;
 

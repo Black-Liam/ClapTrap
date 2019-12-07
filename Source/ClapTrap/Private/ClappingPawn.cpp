@@ -29,9 +29,15 @@ AClappingPawn::AClappingPawn()
     PawnSpriteComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
     PawnSpriteComponent->SetGenerateOverlapEvents(false);
 
+    ClapSprite = CreateDefaultSubobject<UPaperSpriteComponent>("Clap Visual");
+    ClapSprite->SetupAttachment(CollisionCap);
+    ClapSprite->SetCollisionProfileName("NoCollision");
+    ClapSprite->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+    ClapSprite->SetGenerateOverlapEvents(false);
+
     Camera = CreateDefaultSubobject<ULaggingCameraComponent>("Camera");
     Camera->SetProjectionMode(ECameraProjectionMode::Orthographic);
-    Camera->SetOrthoWidth(3000.0f);
+    Camera->SetOrthoWidth(2500.0f);
 
     LandingOverlap = CreateDefaultSubobject<UBoxComponent>("Landing Gear");
     LandingOverlap->SetupAttachment(CollisionCap);
@@ -79,6 +85,11 @@ void AClappingPawn::MoveRight(float value)
             CollisionCap->BodyInstance.SetLinearVelocity(newVel, false);
         }
     }
+}
+
+void AClappingPawn::Clap()
+{
+    MakeNoise(1.1,this,GetActorLocation(), 150.0f);
 }
 
 void AClappingPawn::MoveUp()
