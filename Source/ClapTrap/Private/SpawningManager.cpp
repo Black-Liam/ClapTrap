@@ -8,6 +8,7 @@
 #include "StoppingPlatform.h"
 #include "GenericPlatform/GenericPlatformMath.h"
 #include "PatrolPoint.h"
+#include "SleepingEnemy.h"
 
 
 // Sets default values
@@ -22,8 +23,6 @@ ASpawningManager::ASpawningManager()
 void ASpawningManager::BeginPlay()
 {
 	Super::BeginPlay();
-
-    int num = 40;
 #pragma region Platforms
     for (int i = 0; i < numberOfPlatforms; i++)
     {
@@ -88,6 +87,7 @@ void ASpawningManager::BeginPlay()
                     platformNumber++;
                     success = false;
                 }
+
             }
         }
     }
@@ -126,9 +126,58 @@ void ASpawningManager::BeginPlay()
     {
         AMovingPlatform* mover = Cast<AMovingPlatform>(Platforms[i]);
         if (mover)
+        {
             mover->SetPatrol(PatrolPoints[i * 2], PatrolPoints[i * 2 + 1]);
+            mover->SetSpeed((FMath::FRand() * 50.f) + 300.f + (i * 1.f));
+        }
+           
     }
 #pragma endregion Platforms
+
+#pragma region Enemies
+
+    for (int i = 0; i < numberOfPlatforms; i++)
+    {
+        if (i % sleepingEnemyFrequency == 0)
+        {
+            if (SleepingTemplate)
+            {
+                UWorld* World = GetWorld();
+                if (World)
+                {
+                    FActorSpawnParameters SpawnParams;
+                    SpawnParams.Owner = this;
+                    SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+                    FTransform EnemyTransform;
+                    EnemyTransform.SetLocation(FVector(1000,1000,1000));
+                    ASleepingEnemy* enemy = World->SpawnActor<ASleepingEnemy>(SleepingTemplate, EnemyTransform, SpawnParams);
+
+                    if (enemy)
+                    {
+                        SleepingEnemies.Add(enemy);
+                    }
+                }
+            }
+        }
+    }
+
+    //Spawn flying enemies
+
+    //spawn flying enemy patrol
+
+    for (int i = 1; i < numberOfPlatforms; i++)
+    {
+        if (i % sleepingEnemyFrequency == 0)
+        {
+            if (Platforms[i])
+                SleepingEnemies[i]->myPlat = Platforms[i];
+        }
+    }
+
+    //Attach flying enemies to their patrol points
+
+#pragma endregion Enemies
+
 
 
 }

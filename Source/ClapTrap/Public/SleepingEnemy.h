@@ -21,10 +21,19 @@ public:
         class UBoxComponent* EnemyCollision;
 
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
-        class UPaperFlipbookComponent* EnemySpriteComponent;
+        class UPaperSpriteComponent* EnemySpriteComponent;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
+        class UPaperSpriteComponent* DeathSpriteComponent;
 
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Sensing", meta = (AllowPrivateAccess = "true"))
         class UPawnSensingComponent* ListeningComponent;
+
+    UPROPERTY(EditInstanceOnly, Category = "Location")
+        class AFloatingPlatform* myPlat;
+
+    float timer = 0;
+    bool bHasDied;
 
 protected:
 	// Called when the game starts or when spawned

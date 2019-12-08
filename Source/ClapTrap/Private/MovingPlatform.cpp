@@ -18,12 +18,6 @@ void AMovingPlatform::BeginPlay()
 {
     Super::BeginPlay();
 
-
-
-    //PatrolPoints.Add(StartPoint);
-    //PatrolPoints.Add(EndPoint);
-    //
-    //Target = PatrolPoints[nextLocation];
 }
 
 void AMovingPlatform::SetPatrol(APatrolPoint* s, APatrolPoint* e)
@@ -35,6 +29,11 @@ void AMovingPlatform::SetPatrol(APatrolPoint* s, APatrolPoint* e)
     PatrolPoints.Add(EndPoint);
 
     Target = PatrolPoints[nextLocation];
+}
+
+void AMovingPlatform::SetSpeed(float v)
+{
+    speed = v;
 }
 
 void AMovingPlatform::Tick(float DeltaTime)

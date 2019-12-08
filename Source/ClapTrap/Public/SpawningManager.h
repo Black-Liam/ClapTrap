@@ -27,12 +27,26 @@ public:
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
         TSubclassOf<class APatrolPoint> PatrolTemplate;
 
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
+        TSubclassOf<class ASleepingEnemy> SleepingTemplate;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
+        TSubclassOf<class AFlyingEnemy> FlyingTemplate;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Arrays")
         TArray<APatrolPoint*> PatrolPoints;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Arrays")
         TArray<AFloatingPlatform*> Platforms;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Arrays")
+        TArray<ASleepingEnemy*> SleepingEnemies;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Arrays")
+        TArray<ASleepingEnemy*> FlyingEnemies;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Arrays")
+        TArray<APatrolPoint*> FlyingPatrolPoints;
 
     UPROPERTY(BlueprintReadOnly)
         int platformNumber = 0;

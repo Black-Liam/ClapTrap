@@ -43,10 +43,15 @@ public:
     UPROPERTY(EditAnywhere, Category = "Collision")
         class UBoxComponent* LandingOverlap;
 
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AI")
+        class UPawnNoiseEmitterComponent* NoiseEmitterComponent;
+
     UFUNCTION()
         void MoveRight(float value);
 
         void Clap();
+        float clapTimer = 0;
+        bool bClapped = false;
 
     void MoveUp();
 

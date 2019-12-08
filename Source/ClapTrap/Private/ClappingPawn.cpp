@@ -8,6 +8,8 @@
 #include "PaperSpriteComponent.h"
 #include "LaggingCameraComponent.h"
 #include "MovingPlatform.h"
+#include "Components/AudioComponent.h"
+#include "Components/PawnNoiseEmitterComponent.h"
 
 
 // Sets default values
@@ -34,6 +36,7 @@ AClappingPawn::AClappingPawn()
     ClapSprite->SetCollisionProfileName("NoCollision");
     ClapSprite->SetCollisionEnabled(ECollisionEnabled::NoCollision);
     ClapSprite->SetGenerateOverlapEvents(false);
+    ClapSprite->SetVisibility(false);
 
     Camera = CreateDefaultSubobject<ULaggingCameraComponent>("Camera");
     Camera->SetProjectionMode(ECameraProjectionMode::Orthographic);
@@ -44,6 +47,8 @@ AClappingPawn::AClappingPawn()
     LandingOverlap->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
     LandingOverlap->SetGenerateOverlapEvents(true);
     LandingOverlap->OnComponentBeginOverlap.AddDynamic(this, &AClappingPawn::Landed);
+
+    NoiseEmitterComponent = CreateDefaultSubobject<UPawnNoiseEmitterComponent>(TEXT("Noise Emitter"));
 }
 
 // Called when the game starts or when spawned
@@ -57,7 +62,20 @@ void AClappingPawn::BeginPlay()
 void AClappingPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+    clapTimer += DeltaTime;
+    if (clapTimer <= 0.5 && bClapped)
+    {
+        MakeNoise(1.0f, this, GetActorLocation(), 150.0f);
+    }
+    else if (clapTimer > 0.5 && clapTimer < 1.0)
+    {
+        //ClapSprite->SetSpriteColor(FLinearColor(1.0, 1.0, 1.0, 0.0));
+        ClapSprite->SetVisibility(false);
+    }
+    else if (clapTimer >= 3 && bClapped)
+    {
+        bClapped = false;
+    }
 }
 
 // Called to bind functionality to input
@@ -67,7 +85,7 @@ void AClappingPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
     PlayerInputComponent->BindAxis("MoveRight", this, &AClappingPawn::MoveRight);
     PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AClappingPawn::MoveUp);
-    //PlayerInputComponent->BindAction("Clap", IE_Pressed, this, &AClappingPawn::Clap);
+    PlayerInputComponent->BindAction("ClapAction", IE_Pressed, this, &AClappingPawn::Clap);
 }
 
 void AClappingPawn::MoveRight(float value)
@@ -89,7 +107,14 @@ void AClappingPawn::MoveRight(float value)
 
 void AClappingPawn::Clap()
 {
-    MakeNoise(1.1,this,GetActorLocation(), 150.0f);
+    if (!bClapped)
+    {
+        MakeNoise(1.1f, this, GetActorLocation(), 150.0f);
+        //ClapSprite->SetSpriteColor(FLinearColor(1.0, 1.0, 1.0, 1.0));
+        ClapSprite->SetVisibility(true);
+        clapTimer = 0.0;
+        bClapped = true;
+    }
 }
 
 void AClappingPawn::MoveUp()
