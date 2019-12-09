@@ -27,10 +27,9 @@ AFloatingPlatform::AFloatingPlatform()
 // Called when the game starts or when spawned
 void AFloatingPlatform::BeginPlay()
 {
-	Super::BeginPlay();
-	
-}
+    Super::BeginPlay();
 
+}
 // Called every frame
 void AFloatingPlatform::Tick(float DeltaTime)
 {

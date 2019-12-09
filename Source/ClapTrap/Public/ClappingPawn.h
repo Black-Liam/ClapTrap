@@ -43,9 +43,6 @@ public:
     UPROPERTY(EditAnywhere, Category = "Collision")
         class UBoxComponent* LandingOverlap;
 
-    UPROPERTY(EditAnywhere, Category = "Collision")
-        class UBoxComponent* HurtOverlap;
-
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AI")
         class UPawnNoiseEmitterComponent* NoiseEmitterComponent;
 
@@ -80,5 +77,4 @@ public:
     UFUNCTION()
         void returnToCheckpoint();
 
-    //class AMyPlayerState* myPlayerState;
 };
