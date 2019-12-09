@@ -78,6 +78,13 @@ void AClappingPawn::Tick(float DeltaTime)
     {
         bClapped = false;
     }
+
+
+    if (GetActorLocation().Z + 500.0f < Camera->GetRelativeTransform().GetLocation().Z)
+    {
+        returnToCheckpoint();
+    }
+
 }
 
 // Called to bind functionality to input
@@ -94,6 +101,8 @@ void AClappingPawn::MoveRight(float value)
 {
     if (value != 0)
     {
+        if (!bOnFloor)
+            value = value * 2 / 3;
         FVector currentVel = CollisionCap->BodyInstance.GetUnrealWorldVelocity();
         if (FMath::Abs(currentVel.X) < MaxVelX)
         {
@@ -116,6 +125,9 @@ void AClappingPawn::Clap()
         ClapSprite->SetVisibility(true);
         clapTimer = 0.0;
         bClapped = true;
+        if (!bOnFloor)
+            CollisionCap->BodyInstance.AddForce(FVector(0.0f, 0.0f, 1.0f) * Yspeed * 30);
+
     }
 }
 
@@ -165,19 +177,23 @@ void AClappingPawn::Landed(UPrimitiveComponent* OverlappedComponent, AActor* Oth
     }
 }
 
+
+
 void AClappingPawn::returnToCheckpoint()
 {
     if (lastCheckpoint)
     {
         CollisionCap->BodyInstance.ClearForces();
-        this->SetActorLocation(lastCheckpoint->GetActorLocation());
         Camera->GoBack(GetActorLocation());
+        this->SetActorLocation(lastCheckpoint->GetActorLocation());
+        
     }
     else
     {
         CollisionCap->BodyInstance.ClearForces();
-        this->SetActorLocation(FVector(0,0,50));
         Camera->GoBack(GetActorLocation());
+        this->SetActorLocation(FVector(0,0,50));
+        
     }
 }
 

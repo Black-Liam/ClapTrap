@@ -16,9 +16,8 @@ ASleepingEnemy::ASleepingEnemy()
 
     EnemyCollision = CreateDefaultSubobject<UBoxComponent>("Capsule Collision");
     SetRootComponent(EnemyCollision);
-    EnemyCollision->SetCollisionProfileName("BlockAll");
+    EnemyCollision->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
     EnemyCollision->SetNotifyRigidBodyCollision(true);
-    EnemyCollision->SetSimulatePhysics(true);
     UMyBlueprintFunctionLibrary::LockPhysicsTo2DAxis(EnemyCollision);
     Tags.Add("Enemy");
 
@@ -51,11 +50,10 @@ void ASleepingEnemy::BeginPlay()
 void ASleepingEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-    SetActorLocation(myPlat->GetActorLocation() + FVector(0.0, 0.0, 40.0));
 
     timer += DeltaTime;
 
-    if (bHasDied && timer >= 1.0)
+    if (bHasDied && timer >= 0.8)
         Destroy();
 
 }

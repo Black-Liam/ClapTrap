@@ -16,9 +16,8 @@ AFlyingEnemy::AFlyingEnemy()
 
     EnemyCollision = CreateDefaultSubobject<UBoxComponent>("Capsule Collision");
     SetRootComponent(EnemyCollision);
-    EnemyCollision->SetCollisionProfileName("BlockAll");
+    EnemyCollision->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
     EnemyCollision->SetNotifyRigidBodyCollision(true);
-    EnemyCollision->SetSimulatePhysics(false);
     UMyBlueprintFunctionLibrary::LockPhysicsTo2DAxis(EnemyCollision);
     Tags.Add("Enemy");
 
@@ -27,12 +26,6 @@ AFlyingEnemy::AFlyingEnemy()
     EnemySpriteComponent->SetCollisionProfileName("NoCollision");
     EnemySpriteComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
     EnemySpriteComponent->SetGenerateOverlapEvents(false);
-
-    SightSpriteComponent = CreateDefaultSubobject<UPaperSpriteComponent>("Death Visual");
-    SightSpriteComponent->SetupAttachment(EnemyCollision);
-    SightSpriteComponent->SetCollisionProfileName("NoCollision");
-    SightSpriteComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-    SightSpriteComponent->SetGenerateOverlapEvents(false);
 
     EyesightComponent = CreateDefaultSubobject<UEyesightComponent>(TEXT("PawnSensingComp"));
 
@@ -83,7 +76,14 @@ void AFlyingEnemy::OnPawnSeen(APawn* SeenPawn)
 
 void AFlyingEnemy::OnNoiseHeard(APawn* NoiseInstigator, const FVector& Location, float Volume)
 {
-
+    if (Volume >= 1.0)
+    {
+        Destroy();
+    }
+    else
+    {
+        
+    }
 }
 
 void AFlyingEnemy::SetPatrol(APatrolPoint* s, APatrolPoint* e)

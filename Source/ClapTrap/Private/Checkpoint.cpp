@@ -18,9 +18,7 @@ ACheckpoint::ACheckpoint()
     SetRootComponent(CheckpointCollision);
     CheckpointCollision->SetCollisionProfileName("Query and Physics");
     CheckpointCollision->SetNotifyRigidBodyCollision(true);
-    CheckpointCollision->SetSimulatePhysics(true);
     UMyBlueprintFunctionLibrary::LockPhysicsTo2DAxis(CheckpointCollision);
-    Tags.Add("Enemy");
     CheckpointCollision->OnComponentBeginOverlap.AddDynamic(this, &ACheckpoint::Checked);
 
     CheckpointDown = CreateDefaultSubobject<UPaperSpriteComponent>("Sprite Visual");
@@ -49,7 +47,6 @@ void ACheckpoint::BeginPlay()
 void ACheckpoint::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-    SetActorLocation(myPlat->GetActorLocation() + FVector(0.0, 0.0, 40.0));
 
 
 }

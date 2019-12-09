@@ -15,16 +15,19 @@ public:
 	// Sets default values for this actor's properties
 	AFloatingPlatform();
 
-
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
         class UBoxComponent* PlatformCollision;
 
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
         class UPaperSpriteComponent* PlatformSpriteComponent;
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+    
+
+    
 
 public:	
 	// Called every frame
