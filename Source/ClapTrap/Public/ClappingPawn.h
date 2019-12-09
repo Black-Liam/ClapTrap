@@ -71,5 +71,11 @@ public:
     UPROPERTY(EditAnywhere, Category = "Movement")
     float Yspeed = 10000.0f;
 
+    UPROPERTY(EditAnywhere, Category = "Level")
+        class ACheckpoint* lastCheckpoint;
+
+    UFUNCTION()
+        void returnToCheckpoint();
+
     //class AMyPlayerState* myPlayerState;
 };

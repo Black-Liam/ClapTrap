@@ -10,6 +10,7 @@
 #include "PatrolPoint.h"
 #include "SleepingEnemy.h"
 #include "FlyingEnemy.h"
+#include "Checkpoint.h"
 
 
 // Sets default values
@@ -150,7 +151,7 @@ void ASpawningManager::BeginPlay()
                     SpawnParams.Owner = this;
                     SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
                     FTransform EnemyTransform;
-                    EnemyTransform.SetLocation(FVector(1000,1000,1000));
+                    EnemyTransform.SetLocation(Platforms[i]->GetActorLocation() + FVector(0,0,50));
                     ASleepingEnemy* enemy = World->SpawnActor<ASleepingEnemy>(SleepingTemplate, EnemyTransform, SpawnParams);
 
                     if (enemy)
@@ -176,7 +177,7 @@ void ASpawningManager::BeginPlay()
                     SpawnParams.Owner = this;
                     SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
                     FTransform EnemyTransform;
-                    EnemyTransform.SetLocation(EnemyTransform.GetLocation() + FVector(-1000, -1000, -1000));
+                    EnemyTransform.SetLocation(Platforms[i]->GetActorLocation() + FVector(0, 0, 250));
                     AFlyingEnemy* enemy = World->SpawnActor<AFlyingEnemy>(FlyingTemplate, EnemyTransform, SpawnParams);
     
                     if (enemy)
@@ -226,7 +227,7 @@ void ASpawningManager::BeginPlay()
         if (i % sleepingEnemyFrequency == 0)
         {
             if (Platforms[i])
-                SleepingEnemies[i / sleepingEnemyFrequency]->myPlat = Platforms[i];
+                SleepingEnemies[i / sleepingEnemyFrequency]->AttachToActor(Platforms[i], FAttachmentTransformRules::SnapToTargetNotIncludingScale, "Enemy");
         }
     }
 
@@ -242,9 +243,40 @@ void ASpawningManager::BeginPlay()
 
 #pragma region Checkpoint
 
-
-
-
+    //for (int i = 1; i < numberOfPlatforms; i++)
+    //{
+    //    if (i % checkpointFrequency == 0)
+    //    {
+    //        if (CheckpointTemplate)
+    //        {
+    //            UWorld* World = GetWorld();
+    //            if (World)
+    //            {
+    //                FActorSpawnParameters SpawnParams;
+    //                SpawnParams.Owner = this;
+    //                SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+    //                FTransform EnemyTransform;
+    //                EnemyTransform.SetLocation(Platforms[i]->GetActorLocation() + FVector(0, 0, 40));
+    //                ACheckpoint* enemy = World->SpawnActor<ACheckpoint>(CheckpointTemplate, EnemyTransform, SpawnParams);
+    //
+    //                if (enemy)
+    //                {
+    //                    Checkpoints.Add(enemy);
+    //                }
+    //            }
+    //        }
+    //    }
+    //}
+    //
+    //
+    //for (int i = 0; i < numberOfPlatforms; i++)
+    //{
+    //    if (i % checkpointFrequency == checkpointFrequency - 1)
+    //    {
+    //        if (Platforms[i])
+    //            Checkpoints[i / checkpointFrequency]->AttachToActor(Platforms[i], FAttachmentTransformRules::SnapToTargetNotIncludingScale, "Checkpoint");
+    //    }
+    //}
 
 #pragma endregion Checkpoint
 

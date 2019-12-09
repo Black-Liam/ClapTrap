@@ -18,7 +18,7 @@ AFlyingEnemy::AFlyingEnemy()
     SetRootComponent(EnemyCollision);
     EnemyCollision->SetCollisionProfileName("BlockAll");
     EnemyCollision->SetNotifyRigidBodyCollision(true);
-    EnemyCollision->SetSimulatePhysics(true);
+    EnemyCollision->SetSimulatePhysics(false);
     UMyBlueprintFunctionLibrary::LockPhysicsTo2DAxis(EnemyCollision);
     Tags.Add("Enemy");
 
@@ -39,6 +39,9 @@ AFlyingEnemy::AFlyingEnemy()
     EyesightComponent->OnSeePawn.AddDynamic(this, &AFlyingEnemy::OnPawnSeen);
     EyesightComponent->OnHearNoise.AddDynamic(this, &AFlyingEnemy::OnNoiseHeard);
 
+    StartPoint = CreateDefaultSubobject<APatrolPoint>("Start");
+    EndPoint = CreateDefaultSubobject<APatrolPoint>("End");
+
 }
 
 // Called when the game starts or when spawned
@@ -52,6 +55,24 @@ void AFlyingEnemy::BeginPlay()
 void AFlyingEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+    FVector thisLocation = GetActorLocation();
+    FVector thatLocation = Target->GetActorLocation();
+
+    FVector targetLocation = FMath::VInterpConstantTo(thisLocation, thatLocation, DeltaTime, speed);
+
+    SetActorLocation(targetLocation);
+
+    if (thisLocation.Distance(thisLocation, thatLocation) < 10.0f)
+    {
+        if (Target == PatrolPoints.Last())
+            nextLocation = 0;
+        else
+            nextLocation++;
+
+        Target = PatrolPoints[nextLocation];
+    }
+
 
 }
 
@@ -69,6 +90,7 @@ void AFlyingEnemy::SetPatrol(APatrolPoint* s, APatrolPoint* e)
 {
     StartPoint = s;
     EndPoint = e;
+
 
     PatrolPoints.Add(StartPoint);
     PatrolPoints.Add(EndPoint);

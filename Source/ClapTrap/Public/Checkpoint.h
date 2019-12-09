@@ -23,4 +23,19 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+    UPROPERTY(EditAnywhere, Category = "Collision")
+        class UBoxComponent* CheckpointCollision;
+
+    UPROPERTY(EditAnywhere, Category = "Visual")
+        class UPaperSpriteComponent* CheckpointDown;
+
+    UPROPERTY(EditAnywhere, Category = "Visual")
+        class UPaperSpriteComponent* CheckpointUp;
+
+    UPROPERTY(EditAnywhere, Category = "Location")
+        class AFloatingPlatform* myPlat;
+
+    UFUNCTION()
+        void Checked(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
 };

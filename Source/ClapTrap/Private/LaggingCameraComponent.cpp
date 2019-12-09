@@ -11,3 +11,9 @@ void ULaggingCameraComponent::CatchUp(FVector focus)
         this->SetRelativeLocation(focus + FVector(0.f, 500.f, 300.f));
     }
 }
+
+void ULaggingCameraComponent::GoBack(FVector focus)
+{
+    focus *= FVector(0, 0, 1);
+    this->SetRelativeLocation(focus + FVector(0.f, 500.f, 300.f));
+}

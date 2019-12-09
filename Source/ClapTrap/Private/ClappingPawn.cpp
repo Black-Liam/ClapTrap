@@ -10,6 +10,7 @@
 #include "MovingPlatform.h"
 #include "Components/AudioComponent.h"
 #include "Components/PawnNoiseEmitterComponent.h"
+#include "Checkpoint.h"
 
 
 // Sets default values
@@ -24,6 +25,7 @@ AClappingPawn::AClappingPawn()
     CollisionCap->SetNotifyRigidBodyCollision(true);
     CollisionCap->SetSimulatePhysics(true);
     UMyBlueprintFunctionLibrary::LockPhysicsTo2DAxis(CollisionCap);
+    Tags.Add("Player");
 
     PawnSpriteComponent = CreateDefaultSubobject<UPaperSpriteComponent>("Sprite Visual");
     PawnSpriteComponent->SetupAttachment(CollisionCap);
@@ -130,7 +132,10 @@ void AClappingPawn::OnComponentHit(UPrimitiveComponent* HitComponent, AActor* Ot
 {
     if (OtherActor)
     {
-
+        if (OtherActor->ActorHasTag("Enemy"))
+        {
+            returnToCheckpoint();
+        }
     }
 }
 
@@ -150,10 +155,29 @@ void AClappingPawn::Landed(UPrimitiveComponent* OverlappedComponent, AActor* Oth
             Camera->CatchUp(this->GetActorLocation());
             CollisionCap->SetPhysicsLinearVelocity(FVector(0,0,0));
         }
+        if (OtherActor->ActorHasTag("Enemy"))
+        {
+            returnToCheckpoint();
+        }
 
 
 
+    }
+}
 
+void AClappingPawn::returnToCheckpoint()
+{
+    if (lastCheckpoint)
+    {
+        CollisionCap->BodyInstance.ClearForces();
+        this->SetActorLocation(lastCheckpoint->GetActorLocation());
+        Camera->GoBack(GetActorLocation());
+    }
+    else
+    {
+        CollisionCap->BodyInstance.ClearForces();
+        this->SetActorLocation(FVector(0,0,50));
+        Camera->GoBack(GetActorLocation());
     }
 }
 

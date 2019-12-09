@@ -33,6 +33,9 @@ public:
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
         TSubclassOf<class AFlyingEnemy> FlyingTemplate;
 
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Config")
+        TSubclassOf<class ACheckpoint> CheckpointTemplate;
+
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Arrays")
         TArray<APatrolPoint*> PatrolPoints;
 
@@ -47,6 +50,9 @@ public:
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Arrays")
         TArray<APatrolPoint*> FlyingPatrolPoints;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Arrays")
+        TArray<ACheckpoint*> Checkpoints;
 
     UPROPERTY(BlueprintReadOnly)
         int platformNumber = 0;

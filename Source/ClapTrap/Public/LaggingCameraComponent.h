@@ -19,4 +19,11 @@ public:
 
     UFUNCTION()
         void CatchUp(FVector focus);
+
+    UFUNCTION()
+        void GoBack(FVector focus);
+
+    //UFUNCTION()
+        //void
+
 };

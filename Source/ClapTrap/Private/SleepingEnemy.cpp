@@ -51,7 +51,7 @@ void ASleepingEnemy::BeginPlay()
 void ASleepingEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-    //SetActorLocation(myPlat->GetActorLocation() + FVector(0.0, 0.0, 40.0));
+    SetActorLocation(myPlat->GetActorLocation() + FVector(0.0, 0.0, 40.0));
 
     timer += DeltaTime;
 
