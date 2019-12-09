@@ -43,13 +43,16 @@ public:
         TArray<ASleepingEnemy*> SleepingEnemies;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Arrays")
-        TArray<ASleepingEnemy*> FlyingEnemies;
+        TArray<AFlyingEnemy*> FlyingEnemies;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Arrays")
         TArray<APatrolPoint*> FlyingPatrolPoints;
 
     UPROPERTY(BlueprintReadOnly)
         int platformNumber = 0;
+
+    UPROPERTY(BlueprintReadOnly)
+        int flyingNumber = 0;
 
     UPROPERTY(EditAnywhere, Category = "Difficulty")
         int numberOfPlatforms = 40;

@@ -9,6 +9,7 @@
 #include "GenericPlatform/GenericPlatformMath.h"
 #include "PatrolPoint.h"
 #include "SleepingEnemy.h"
+#include "FlyingEnemy.h"
 
 
 // Sets default values
@@ -162,22 +163,90 @@ void ASpawningManager::BeginPlay()
     }
 
     //Spawn flying enemies
+    for (int i = 1; i < numberOfPlatforms; i++)
+    {
+        if (i % flyingEnemyFrequency == 0)
+        {
+            if (FlyingTemplate)
+            {
+                UWorld* World = GetWorld();
+                if (World)
+                {
+                    FActorSpawnParameters SpawnParams;
+                    SpawnParams.Owner = this;
+                    SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+                    FTransform EnemyTransform;
+                    EnemyTransform.SetLocation(EnemyTransform.GetLocation() + FVector(-1000, -1000, -1000));
+                    AFlyingEnemy* enemy = World->SpawnActor<AFlyingEnemy>(FlyingTemplate, EnemyTransform, SpawnParams);
+    
+                    if (enemy)
+                    {
+                        FlyingEnemies.Add(enemy);
+                        flyingNumber++;
+                    }
+                }
+            }
+        }
+    }
 
     //spawn flying enemy patrol
+    for (int i = 0; i < 2 * flyingNumber; i++)
+    {
+        if (PatrolTemplate)
+        {
+            UWorld* World = GetWorld();
+            if (World)
+            {
+                FActorSpawnParameters SpawnParams;
+                SpawnParams.Owner = this;
+                SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+                float XOffset = (FMath::FRand() * 1000.f) - 500.f;
+                FTransform PatrolTransform = Platforms[(i/2) * flyingEnemyFrequency]->GetTransform();
+                if (i % 2 == 0)
+                {
+                    PatrolTransform.SetLocation(PatrolTransform.GetLocation() + FVector(400, 0, 300));
+                }
+                else
+                {
+                    PatrolTransform.SetLocation(PatrolTransform.GetLocation() + FVector(-400, 0, 300));
+                }
+                APatrolPoint* patrolPoint = World->SpawnActor<APatrolPoint>(PatrolTemplate, PatrolTransform, SpawnParams);
 
+                if (patrolPoint)
+                {
+                    FlyingPatrolPoints.Add(patrolPoint);
+                }
+            }
+        }
+    }
+
+    //Attaching Sleeping to platforms
     for (int i = 1; i < numberOfPlatforms; i++)
     {
         if (i % sleepingEnemyFrequency == 0)
         {
             if (Platforms[i])
-                SleepingEnemies[i]->myPlat = Platforms[i];
+                SleepingEnemies[i / sleepingEnemyFrequency]->myPlat = Platforms[i];
         }
     }
 
     //Attach flying enemies to their patrol points
+    for (int i = 0; i < flyingNumber; i++)
+    {
+        FlyingEnemies[i]->SetPatrol(FlyingPatrolPoints[i * 2], FlyingPatrolPoints[i * 2 + 1]);
+        FlyingEnemies[i]->SetSpeed((FMath::FRand() * 50.f) + 300.f + (i * 1.f));
+    }
 
 #pragma endregion Enemies
 
+
+#pragma region Checkpoint
+
+
+
+
+
+#pragma endregion Checkpoint
 
 
 }
